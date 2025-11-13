@@ -1,7 +1,7 @@
 # histoterm
 
 ![Build](https://img.shields.io/badge/build-passing-brightgreen)
-![License: GPLv3](https://img.shields.io/badge/License-MIT-blue](https://img.shields.io/badge/License-GPLv3-blue)
+![License: GPLv3](https://img.shields.io/badge/License-GPLv3-blue)
 ![Rust](https://img.shields.io/badge/Rust-stable-orange)
 
 A lightweight Rust CLI tool that reads numeric data from **stdin** and prints an **ASCII histogram** showing the data distribution — perfect for quick data exploration right from the terminal.
