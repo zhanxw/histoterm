@@ -2,6 +2,15 @@
 name = "histoterm"
 version = "0.1.0"
 edition = "2021"
+authors = ["Xiaowei Zhan <zhanxw@gmail.com>"]
+description = "A Rust CLI tool that prints ASCII histograms from numeric input."
+license = "GPL-3.0-or-later"
+readme = "README.md"
+repository = "https://github.com/zhanxw/histoterm"
+homepage = "https://github.com/zhanxw/histoterm"
+documentation = "https://docs.rs/histoterm"
+keywords = ["histogram", "cli", "data", "distribution", "ascii"]
+categories = ["command-line-utilities", "visualization"]
 
 [profile.release]
 opt-level = 3
