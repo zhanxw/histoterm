@@ -21,14 +21,22 @@ fn main() {
             }
             "--help" | "-h" => {
                 eprintln!("Usage: cat data.txt | histoterm [--bins N] [--width W]");
-                eprintln!("Reads whitespace-separated numbers from stdin and prints an ASCII histogram.");
+                eprintln!(
+                    "Reads whitespace-separated numbers from stdin and prints an ASCII histogram."
+                );
                 return;
             }
             _ => {}
         }
     }
-    if bins == 0 { eprintln!("--bins must be > 0"); return; }
-    if width == 0 { eprintln!("--width must be > 0"); return; }
+    if bins == 0 {
+        eprintln!("--bins must be > 0");
+        return;
+    }
+    if width == 0 {
+        eprintln!("--width must be > 0");
+        return;
+    }
 
     // --- Read stdin ---
     let mut buf = String::new();
@@ -36,7 +44,9 @@ fn main() {
     let mut data: Vec<f64> = Vec::new();
     for tok in buf.split_whitespace() {
         if let Ok(x) = tok.parse::<f64>() {
-            if x.is_finite() { data.push(x); }
+            if x.is_finite() {
+                data.push(x);
+            }
         }
     }
     if data.is_empty() {
@@ -49,8 +59,12 @@ fn main() {
     let (mut min, mut max) = (f64::INFINITY, f64::NEG_INFINITY);
     let (mut sum, mut sumsq) = (0.0, 0.0);
     for &x in &data {
-        if x < min { min = x; }
-        if x > max { max = x; }
+        if x < min {
+            min = x;
+        }
+        if x > max {
+            max = x;
+        }
         sum += x;
         sumsq += x * x;
     }
@@ -59,10 +73,15 @@ fn main() {
     let std = if var > 0.0 { var.sqrt() } else { 0.0 };
 
     // --- Edge case: all values identical ---
-    if (max - min).abs() < std::f64::EPSILON {
+    if (max - min).abs() < f64::EPSILON {
         println!("All values are the same: {:.6}", min);
-        println!("count = {}, min = max = {:.6}, mean = {:.6}, std = {:.6}",
-                 data.len(), min, mean, std);
+        println!(
+            "count = {}, min = max = {:.6}, mean = {:.6}, std = {:.6}",
+            data.len(),
+            min,
+            mean,
+            std
+        );
         println!("\n[{}] {}", "#".repeat(width), data.len());
         return;
     }
@@ -74,24 +93,40 @@ fn main() {
 
     for &x in &data {
         let mut idx = ((x - min) / bin_w).floor() as usize;
-        if idx >= bins { idx = bins - 1; } // include max in last bin
+        if idx >= bins {
+            idx = bins - 1;
+        } // include max in last bin
         counts[idx] += 1;
     }
     let max_count = *counts.iter().max().unwrap().max(&1);
 
     // --- Pretty print ---
     println!("ASCII Histogram  (bins={}, width={})", bins, width);
-    println!("count = {}, min = {:.6}, max = {:.6}, mean = {:.6}, std = {:.6}\n",
-             data.len(), min, max, mean, std);
+    println!(
+        "count = {}, min = {:.6}, max = {:.6}, mean = {:.6}, std = {:.6}\n",
+        data.len(),
+        min,
+        max,
+        mean,
+        std
+    );
 
     for (i, &c) in counts.iter().enumerate() {
         let lo = min + i as f64 * bin_w;
-        let hi = if i + 1 == bins { max } else { min + (i + 1) as f64 * bin_w };
+        let hi = if i + 1 == bins {
+            max
+        } else {
+            min + (i + 1) as f64 * bin_w
+        };
         let bar_len = (c * width) / max_count;
         let pct = (c as f64) * 100.0 / (data.len() as f64);
         println!(
             "[{:<10.4} , {:>10.4}) | {:>6} ({:>5.1}%) | {}",
-            lo, hi, c, pct, "#".repeat(bar_len)
+            lo,
+            hi,
+            c,
+            pct,
+            "#".repeat(bar_len)
         );
     }
 }
